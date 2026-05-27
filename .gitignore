@@ -1,0 +1,20 @@
+# Local datasets and data directories
+dataset/
+data/
+datasets/
+
+# Archives
+*.zip
+
+# Images
+*.jpg
+*.jpeg
+*.png
+
+# Outputs
+results/
+
+# Python
+__pycache__/
+.venv/
+.env

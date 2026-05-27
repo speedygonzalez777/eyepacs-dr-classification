@@ -1,0 +1,6 @@
+project:
+  name: eyepacs-dr-classification
+
+paths:
+  dataset_root: ../dataset/original
+  results_dir: results
