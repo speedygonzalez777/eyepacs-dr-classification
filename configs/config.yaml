@@ -1,6 +1,10 @@
 project:
-  name: eyepacs-dr-classification
+  task_name: 'eyepacs-dr-classification'
+  random_seed: 42
+
 
 paths:
-  dataset_root: ../dataset/original
+  root_dir: 'F:/ZPB/dataset/original'
+  images_dir: 'F:/ZPB/dataset/original/train'
+  labels_csv: 'F:/ZPB/dataset/original/trainLabels.csv'
   results_dir: results
