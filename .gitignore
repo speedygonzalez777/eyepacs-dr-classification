@@ -13,8 +13,13 @@ datasets/
 
 # Outputs
 results/
+runs/
+*.pt
+*.pth
+*.ckpt
 
 # Python
 __pycache__/
+.pytest_cache/
 .venv/
 .env
