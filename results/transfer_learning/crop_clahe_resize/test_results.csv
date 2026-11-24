@@ -1,0 +1,2 @@
+test_loss,test_roc_auc,test_pr_auc,test_balanced_accuracy,test_precision,test_recall,test_specificity,test_f1,test_tn,test_fp,test_fn,test_tp
+0.30495406166637984,0.9189188114232859,0.8773190080695206,0.8612473118279569,0.8334612432847276,0.7784946236559139,0.944,0.8050407709414381,3658,217,309,1086

@@ -1,0 +1,50 @@
+{
+  "experiment": "convnext_tiny_5class_no_clahe",
+  "run_id": "20261124T140520Z-790fbc8e",
+  "training": {
+    "model_name": "convnext_tiny",
+    "training_mode": "full_finetune",
+    "preprocessing": "crop_resize",
+    "image_size": 512,
+    "batch_size": 15,
+    "num_epochs": 30,
+    "learning_rate": 0.0001,
+    "classifier_learning_rate": 0.0001,
+    "weight_decay": 0.01,
+    "classifier_dropout": 0.3,
+    "early_stopping_patience": 4,
+    "random_seed": 42,
+    "num_workers": 3,
+    "pin_memory": true,
+    "dataloader_seed": 42,
+    "use_scheduler": false,
+    "backbone_learning_rate": 1e-05
+  },
+  "classes": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "target": "level",
+  "pretrained_weights": "ConvNeXt_Tiny_Weights.IMAGENET1K_V1",
+  "optimizer": "AdamW",
+  "loss": "CrossEntropyLoss",
+  "scheduler": null,
+  "amp_dtype": "bfloat16",
+  "cudnn_benchmark": true,
+  "checkpoint_monitor": "val_binary_bce",
+  "early_stopping_monitor": "val_binary_bce",
+  "min_delta_binary_bce": 0.001,
+  "binary_threshold": 0.5,
+  "data": {
+    "images_dir": "F:\\ZPB\\dataset\\original\\train",
+    "split_manifest": "split.csv",
+    "source_split": "F:\\ZPB\\eyepacs-dr-classification\\results\\transfer_learning\\convnext_tiny_regularized\\20261123T081734Z-349d2677\\split.csv",
+    "split_sha256": "886b344c0ac6bb1a72eb00fb0b95eec64fa8b2c4a137587da0d9b96908088371",
+    "augmentation_splits": [
+      "train"
+    ]
+  }
+}
