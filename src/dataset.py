@@ -32,6 +32,8 @@ class EyePACSDataset(Dataset):
         use_augmentations: bool = False,
         mean: tuple[float, float, float] = (0.485, 0.456, 0.406),
         std: tuple[float, float, float] = (0.229, 0.224, 0.225),
+        include_names: bool = False,
+        use_grade_labels: bool = False,
     ):
         self.labels_df = labels_df.reset_index(drop=True).copy()
         
@@ -42,6 +44,8 @@ class EyePACSDataset(Dataset):
         self.preprocessing = preprocessing
         self.image_size = image_size
         self.use_augmentations = use_augmentations
+        self.include_names = include_names
+        self.use_grade_labels = use_grade_labels
         self.mean = torch.tensor(mean, dtype=torch.float32).view(3, 1, 1)
         self.std = torch.tensor(std, dtype=torch.float32).view(3, 1, 1)
 
@@ -94,7 +98,7 @@ class EyePACSDataset(Dataset):
 
         return image.astype(np.uint8)
     
-    def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor]:
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor] | tuple[torch.Tensor, torch.Tensor, str]:
         row = self.labels_df.iloc[idx]
 
         image_name = row['image']
@@ -109,7 +113,12 @@ class EyePACSDataset(Dataset):
 
         image = (image - self.mean) / self.std 
 
-        label = torch.tensor(row['binary_label'], dtype=torch.float32)
+        if self.use_grade_labels:
+            label = torch.tensor(int(row['level']), dtype=torch.long)
+        else:
+            label = torch.tensor(row['binary_label'], dtype=torch.float32)
 
-        return image, label 
+        if self.include_names:
+            return image, label, image_path.name
+        return image, label
         
