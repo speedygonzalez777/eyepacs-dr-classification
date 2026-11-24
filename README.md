@@ -46,14 +46,22 @@ python -c "import torch; print(torch.__version__); print(torch.cuda.is_available
 
 ## Dataset Paths
 
-The training script currently expects:
+The training script resolves the dataset relative to the project directory:
 
 ```python
-LABELS_CSV = Path("F:/ZPB/dataset/original/trainLabels.csv")
-IMAGES_DIR = Path("F:/ZPB/dataset/original/train")
+DATASET_ROOT = PROJECT_ROOT / "dataset" / "original"
+LABELS_CSV = DATASET_ROOT / "trainLabels.csv"
+IMAGES_DIR = DATASET_ROOT / "train"
 ```
 
-If your dataset is stored elsewhere, update these constants in `scripts/train_transfer_learning.py` before starting training. Image files are expected to match the EyePACS naming from `trainLabels.csv`, with `.jpeg` appended by the dataset loader.
+Place the data in:
+
+```text
+dataset/original/trainLabels.csv
+dataset/original/train/
+```
+
+To use a dataset stored elsewhere, update `DATASET_ROOT` in `scripts/train_transfer_learning.py`. Image files are expected to match the EyePACS naming from `trainLabels.csv`, with `.jpeg` appended by the dataset loader.
 
 ## Preprocessing Variants
 

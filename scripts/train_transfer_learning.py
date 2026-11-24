@@ -25,8 +25,9 @@ from sklearn.metrics import (
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
-LABELS_CSV = Path("F:/ZPB/dataset/original/trainLabels.csv")
-IMAGES_DIR = Path("F:/ZPB/dataset/original/train")
+DATASET_ROOT = PROJECT_ROOT / "dataset" / "original"
+LABELS_CSV = DATASET_ROOT / "trainLabels.csv"
+IMAGES_DIR = DATASET_ROOT / "train"
 
 PREPROCESSING = "crop_resize"
 
