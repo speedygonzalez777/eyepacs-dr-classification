@@ -61,6 +61,20 @@ dataset/original/trainLabels.csv
 dataset/original/train/
 ```
 
+Download the Kaggle dataset into this layout from the project root:
+
+```powershell
+python -m pip install kagglehub
+python scripts/download_dataset.py
+```
+
+KaggleHub downloads directly to `dataset/kagglehub_download` on the project
+drive. The script then moves the labels and JPEG images (including files inside
+ZIP archives) into `dataset/original`, which is the location used by the
+training scripts. If `dataset/original` is already complete, the script exits
+without downloading again. Kaggle authentication and acceptance of the
+dataset's terms may be required.
+
 To use a dataset stored elsewhere, update `DATASET_ROOT` in `scripts/train_transfer_learning.py`. Image files are expected to match the EyePACS naming from `trainLabels.csv`, with `.jpeg` appended by the dataset loader.
 
 ## Transfer-Learning Models
