@@ -4,7 +4,7 @@ project:
 
 
 paths:
-  root_dir: 'F:/ZPB/dataset/original'
-  images_dir: 'F:/ZPB/dataset/original/train'
-  labels_csv: 'F:/ZPB/dataset/original/trainLabels.csv'
-  results_dir: results
+  root_dir: 'dataset/original'
+  images_dir: 'dataset/original/train'
+  labels_csv: 'dataset/original/trainLabels.csv'
+  results_dir: 'results'

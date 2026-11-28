@@ -1,0 +1,76 @@
+{
+  "run_id": "20261121T174807Z-4b717773",
+  "experiment": "base_scheduler",
+  "training": {
+    "model_name": "convnext_base",
+    "training_mode": "full_finetune",
+    "preprocessing": "crop_clahe_resize",
+    "image_size": 512,
+    "batch_size": 15,
+    "num_epochs": 30,
+    "learning_rate": 0.0001,
+    "classifier_learning_rate": 0.0001,
+    "backbone_last_stage_learning_rate": 1e-05,
+    "weight_decay": 0.0001,
+    "classifier_dropout": null,
+    "early_stopping_patience": 8,
+    "min_delta_roc_auc": 0.0,
+    "random_seed": 42,
+    "num_workers": 3,
+    "pin_memory": true,
+    "dataloader_seed": 42,
+    "use_scheduler": true
+  },
+  "pretrained_weights": "ConvNeXt_Base_Weights.IMAGENET1K_V1",
+  "optimizer": "AdamW",
+  "loss": "BCEWithLogitsLoss",
+  "scheduler": {
+    "name": "ReduceLROnPlateau",
+    "monitor": "val_roc_auc",
+    "mode": "max",
+    "factor": 0.5,
+    "patience": 2,
+    "threshold": 0.001,
+    "threshold_mode": "abs",
+    "cooldown": 1,
+    "min_lr": 1e-06
+  },
+  "unfreeze_schedule": null,
+  "early_stopping_start_epoch": 1,
+  "data": {
+    "labels_csv": "F:\\ZPB\\dataset\\original\\trainLabels.csv",
+    "images_dir": "F:\\ZPB\\dataset\\original\\train",
+    "split_manifest": "split.csv",
+    "split_fractions": {
+      "train": 0.7,
+      "val": 0.15,
+      "test": 0.15
+    },
+    "augmentation_splits": [
+      "train"
+    ]
+  },
+  "evaluation": {
+    "checkpoint_monitor": "val_roc_auc",
+    "threshold": 0.5
+  },
+  "environment": {
+    "device": "cuda",
+    "amp": true,
+    "cudnn_benchmark": true,
+    "python": "3.12.10",
+    "torch": "2.11.0+cu128",
+    "torchvision": "0.26.0+cu128",
+    "numpy": "2.4.6",
+    "pandas": "3.0.3"
+  },
+  "git_commit": "56ef803c822c0a1dacb0d16418f7089c6f7e6693",
+  "source_sha256": {
+    "scripts/train_transfer_learning.py": "dc9ccc2a0a328393a22757737534867b11819b645ebcb784caa8cb3f2c5a1da3",
+    "src/dataset.py": "dbe52e09a5eb230dd2a20f8847d4ad51fda0dd535e663005220fe320abd3cfea",
+    "src/preprocessing.py": "50d876e669590ded8b44b1af1725af5e16bf71dddf96a35c0c2fde9c55581f5d",
+    "src/splits.py": "49e6ac5a31cbf176c487605286395dc1968afbafa02d47cfecb551eddba6c786",
+    "src/transfer_learning_model.py": "6a0d832b1875f4113904b1c6dbb5aaca4933d9ea3e7ed33db5d36f425ea6f0e9",
+    "requirements.txt": "baecbbab128e6aa53c061e4cd14920acc23d35f04d8c5edbddab99f7ccfef815"
+  }
+}

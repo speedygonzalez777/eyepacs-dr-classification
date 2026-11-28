@@ -13,10 +13,13 @@ datasets/
 
 # Outputs
 results/
+results/dinov3_linear_probe/
 runs/
+events.out.tfevents*
 *.pt
 *.pth
 *.ckpt
+*.safetensors
 
 # Python
 __pycache__/
