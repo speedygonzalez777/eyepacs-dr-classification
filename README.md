@@ -57,40 +57,15 @@ If your dataset is stored elsewhere, update these constants in `scripts/train_tr
 
 ## Cleaned Dataset
 
-The cleaned dataset is not uploaded anywhere. Everyone builds it locally from the original Kaggle images ([dreamer07/eyepacs](https://www.kaggle.com/datasets/dreamer07/eyepacs), 35,126 train images) using the manifest stored in git:
-
-- `metadata/manifest.csv` - one row per original image: `level`, `binary_label`, `patient_id`, fixed `split`, `eyeq_quality`, `p_reject`, `manual_decision`, `keep`, `exclude_reason`.
-- `metadata/eyeq/` - source, license and citation of the EyeQ quality labels used by the manifest.
-
-Current manifest (`v2-eyeq-model-manual`) keeps 30,484 of 35,126 images (22,223 no DR, 8,261 DR) and excludes 4,642:
-
-| `exclude_reason` | rule | images |
-|---|---|---|
-| `eyeq_reject` | graded **Reject** by EyeQ (12,543 images have an EyeQ grade) | 2,320 |
-| `model_reject` | no EyeQ grade, quality model `p_reject >= 0.5`, DR level 0-1 | 2,195 |
-| `manual_reject` | no EyeQ grade, `p_reject >= 0.5`, DR level 2-4, rejected in manual review (842 reviewed, 715 kept) | 127 |
-
-The quality model is a logistic regression on DenseNet121 features from QuickQual, trained on the EyeQ grades (cross-validated ROC-AUC 0.99 for Reject vs rest). Flagged images with DR level 2-4 are reviewed by hand, because the model tends to flag laser scars and severe pathology as artefacts. The scripts, notebooks and manual decisions used to build the manifest are on the `users/rmichal/data-cleaning` branch; to train you only need the manifest and `scripts/prepare_dataset.py`.
-
-Build the cleaned dataset (originals are only read, never modified):
+Build the cleaned dataset from the original Kaggle images in `dataset/original/train`:
 
 ```powershell
 python scripts/prepare_dataset.py
 ```
 
-By default it reads the originals from `dataset/original/train` and writes to `dataset/clean_768` (both relative to the project root). Other locations can be passed with `--src` and `--dst`, for example `--src F:/ZPB/dataset/original/train --dst F:/ZPB/dataset/clean_768`.
+It writes `dataset/clean_768/images/` (cropped, 768x768) and `dataset/clean_768/labels.csv`, and never modifies the originals. Which images are kept is defined by `metadata/manifest.csv`: 30,484 of 35,126 images remain after removing those with poor quality (EyeQ labels, a quality model and manual review).
 
-This writes:
-
-- `clean_768/images/<image>.jpeg` - kept images, cropped to the fundus and resized to 768x768 (about 3.5 GB),
-- `clean_768/labels.csv` - `image, level, binary_label, patient_id, side, split`,
-- `clean_768/dataset_info.json` - manifest hash and counts; compare it between machines to confirm you have the same dataset.
-
-Use `--size 0` to keep the original full-resolution files instead (hard links when on the same drive, otherwise copies). The script is incremental: after pulling an updated manifest, run it again and it only adds or removes the changed images.
-
-To train on it, set `IMAGES_DIR` to `dataset/clean_768/images` and `LABELS_CSV` to `dataset/clean_768/labels.csv`, and **use the `split` column from `labels.csv` instead of calling `create_patient_level_split` again**. Re-splitting the filtered set would change the test set and make results incomparable. The stored split is identical to the one `create_patient_level_split` produces on the full dataset (seed 42).
-
-Note: preprocessing variants (`crop_ben_resize`, `crop_clahe_resize`, ...) applied to 768 px cached images are not identical to the same variants applied to full-resolution originals, because filters such as the Ben Graham blur (`sigma=30`) act relative to image size. Compare experiments only within the same image source.
+For training, use `dataset/clean_768/images` and `dataset/clean_768/labels.csv`, and take the train/val/test split from the `split` column instead of splitting again.
 
 ## Preprocessing Variants
 
