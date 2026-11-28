@@ -38,7 +38,7 @@ def copy_archive_member(
             shutil.copyfileobj(source, target)
 
 
-def main() -> None:
+def download_dataset() -> None:
     if dataset_is_ready():
         print(f"Dataset already ready: {DATASET_ROOT}")
         return
@@ -140,6 +140,10 @@ def main() -> None:
         f"Images: {images_dir} "
         f"({len(disk_images) + len(archive_images)} found)"
     )
+
+
+def main() -> None:
+    download_dataset()
 
 
 if __name__ == "__main__":

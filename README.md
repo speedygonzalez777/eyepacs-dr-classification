@@ -61,19 +61,28 @@ dataset/original/trainLabels.csv
 dataset/original/train/
 ```
 
-Download the Kaggle dataset into this layout from the project root:
+Run the dataset pipeline from the project root:
 
 ```powershell
 python -m pip install kagglehub
-python scripts/download_dataset.py
+python scripts/prepare_dataset.py
 ```
 
-KaggleHub downloads directly to `dataset/kagglehub_download` on the project
-drive. The script then moves the labels and JPEG images (including files inside
-ZIP archives) into `dataset/original`, which is the location used by the
-training scripts. If `dataset/original` is already complete, the script exits
-without downloading again. Kaggle authentication and acceptance of the
-dataset's terms may be required.
+`prepare_dataset.py` downloads the dataset when it is missing, using the same
+KaggleHub extraction and organization as `download_dataset.py`, then prepares
+the cleaned copy by default. To download it but leave the data in its original
+form, run:
+
+```powershell
+python scripts/prepare_dataset.py --original-only
+```
+
+In either case, the originals are stored in `dataset/original` and are never
+modified by preparation. KaggleHub downloads to `dataset/kagglehub_download`;
+Kaggle authentication and acceptance of the dataset's terms may be required.
+`python scripts/download_dataset.py` remains available to download/organize
+the originals without preparing a cleaned copy. If the dataset is already
+complete, it is not downloaded again.
 
 To use a dataset stored elsewhere, update `DATASET_ROOT` in `scripts/train_transfer_learning.py`. Image files are expected to match the EyePACS naming from `trainLabels.csv`, with `.jpeg` appended by the dataset loader.
 
@@ -97,7 +106,7 @@ Full fine-tuning is the default. The script also supports partial fine-tuning fo
 
 ## Cleaned Dataset
 
-Build the cleaned dataset from the original Kaggle images in `dataset/original/train`:
+Build (or incrementally update) the cleaned dataset from the Kaggle images:
 
 ```powershell
 python scripts/prepare_dataset.py

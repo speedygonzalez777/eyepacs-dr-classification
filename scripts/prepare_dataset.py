@@ -1,9 +1,7 @@
-"""Build the cleaned EyePACS dataset locally from the original Kaggle images.
+"""Download the original EyePACS dataset if needed and optionally build a cleaned copy.
 
-Everyone downloads the original dataset themselves; this script then produces
-exactly the same cleaned dataset on every machine, driven by
-metadata/manifest.csv (which lives in git). Originals are only read, never
-modified or deleted.
+The cleaned dataset is driven by metadata/manifest.csv (which lives in git).
+Originals are only read, never modified or deleted.
 
 Output (--dst):
     images/<image>.jpeg   kept images only, cropped to the fundus and resized
@@ -25,6 +23,7 @@ relative to the project root.
 
 Example:
     python scripts/prepare_dataset.py
+    python scripts/prepare_dataset.py --original-only
     python scripts/prepare_dataset.py --src ~/data/eyepacs/raw/train --dst ~/data/eyepacs/clean_768
 """
 
@@ -51,6 +50,7 @@ from src.data_cleaning import (  # noqa: E402
     make_cached_image,
     save_rgb_jpeg,
 )
+from scripts.download_dataset import download_dataset  # noqa: E402
 
 DEFAULT_MANIFEST = PROJECT_ROOT / "metadata" / "manifest.csv"
 DEFAULT_SRC = PROJECT_ROOT / "dataset" / "original" / "train"
@@ -97,6 +97,8 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--workers", type=int, default=None, help="default: all CPU cores")
     parser.add_argument("--no-prune", action="store_true",
                         help="do not remove images that the manifest no longer keeps")
+    parser.add_argument("--original-only", action="store_true",
+                        help="download the original dataset if needed, but do not prepare a cleaned copy")
     args = parser.parse_args(argv)
     if args.dst is None:
         args.dst = PROJECT_ROOT / "dataset" / (f"clean_{args.size}" if args.size else "clean_original")
@@ -106,8 +108,14 @@ def main(argv: list[str] | None = None) -> None:
     images_dir = dst_dir / "images"
     manifest_path = args.manifest.expanduser().resolve()
 
+    if src_dir == DEFAULT_SRC.resolve():
+        download_dataset()
     if not src_dir.is_dir():
         sys.exit(f"--src does not exist: {src_dir}")
+    if args.original_only:
+        print(f"Original dataset left unchanged: {src_dir.parent}")
+        return
+
     if dst_dir == src_dir or src_dir.is_relative_to(dst_dir) or dst_dir.is_relative_to(src_dir):
         sys.exit("--dst must be a separate folder, not inside / containing --src (originals stay untouched)")
 
