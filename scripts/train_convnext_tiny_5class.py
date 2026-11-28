@@ -20,8 +20,8 @@ from scripts.train_transfer_learning import (
 )
 
 GRADES = (0, 1, 2, 3, 4)
-REFERENCE_SPLIT = (RESULTS_DIR / "convnext_tiny_regularized" /
-                   "20261123T081734Z-349d2677" / "split.csv")
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+REFERENCE_SPLIT = PROJECT_ROOT / "metadata" / "convnext_tiny_regularized_split.csv"
 
 
 def create_grade_model() -> nn.Module:

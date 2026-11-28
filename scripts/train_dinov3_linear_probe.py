@@ -37,8 +37,9 @@ from src.preprocessing import preprocess_crop_clahe_resize
 from src.splits import create_patient_level_split
 
 
-LABELS_CSV = Path("F:/ZPB/dataset/original/trainLabels.csv")
-IMAGES_DIR = Path("F:/ZPB/dataset/original/train")
+DATASET_ROOT = PROJECT_ROOT / "dataset" / "clean_768"
+LABELS_CSV = DATASET_ROOT / "labels.csv"
+IMAGES_DIR = DATASET_ROOT / "images"
 
 PREPROCESSING = "crop_clahe_resize"
 IMAGE_SIZE = 512
