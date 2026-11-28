@@ -95,6 +95,18 @@ Available models:
 
 Full fine-tuning is the default. The script also supports partial fine-tuning for ConvNeXt-Large and the ConvNeXt-Base experiments below.
 
+## Cleaned Dataset
+
+Build the cleaned dataset from the original Kaggle images in `dataset/original/train`:
+
+```powershell
+python scripts/prepare_dataset.py
+```
+
+It writes `dataset/clean_768/images/` (cropped, 768x768) and `dataset/clean_768/labels.csv`, and never modifies the originals. Which images are kept is defined by `metadata/manifest.csv`: 30,484 of 35,126 images remain after removing those with poor quality (EyeQ labels, a quality model and manual review).
+
+For training, use `dataset/clean_768/images` and `dataset/clean_768/labels.csv`, and take the train/val/test split from the `split` column instead of splitting again.
+
 ## Preprocessing Variants
 
 Set `preprocessing` in `DEFAULT_CONFIG` to one of the supported values:
